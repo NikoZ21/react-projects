@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import questions from "../questions";
-
 import quizCompleteImage from "../assets/quiz-complete.png";
+import QuestionTimer from "./QuestionTimer";
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
@@ -28,7 +28,10 @@ export default function Quiz() {
 
   return (
     <div id="quiz">
-      <h2>Question {activeQuestionIndex}</h2>
+      <QuestionTimer
+        timeout={3000}
+        onTimeout={() => handleAnswerClick("skipped")}
+      />
       <div id="question">
         <h2>{questions[activeQuestionIndex].text}</h2>
         <ul id="answers">
