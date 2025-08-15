@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import questions from "../questions";
 import quizCompleteImage from "../assets/quiz-complete.png";
@@ -8,9 +8,13 @@ export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
   const activeQuestionIndex = userAnswers.length;
 
-  function handleAnswerClick(selectedAnswer) {
+  const handleAnswerClick = useCallback((selectedAnswer) => {
     setUserAnswers((prevAnswers) => [...prevAnswers, selectedAnswer]);
-  }
+  }, []);
+
+  const handleSkipAnswer = useCallback(() => {
+    handleAnswerClick(null);
+  }, [handleAnswerClick]);
 
   const isQuizOver = activeQuestionIndex == questions.length;
 
@@ -28,10 +32,7 @@ export default function Quiz() {
 
   return (
     <div id="quiz">
-      <QuestionTimer
-        timeout={3000}
-        onTimeout={() => handleAnswerClick("skipped")}
-      />
+      <QuestionTimer timeout={3000} onTimeout={handleSkipAnswer} />
       <div id="question">
         <h2>{questions[activeQuestionIndex].text}</h2>
         <ul id="answers">
